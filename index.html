@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Water Mill Games – Drop Word</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0d1a2e;
+      --navy-mid: #14243d;
+      --navy-light: #1e3357;
+      --cream: #d4c9a0;
+      --cream-light: #ede5c8;
+      --blue-glow: #4a9edd;
+      --gold: #f5c842;
+      --fire: #ff6b35;
+      --lava: #e03030;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--navy);
+      color: var(--cream-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── STARS BACKGROUND ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 25% 40%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 40% 8%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 55% 30%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 18%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 85% 5%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 92% 35%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 15% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 72%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 60% 55%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 78% 68%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1.5px 1.5px at 5% 85%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 47% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.5) 0%, transparent 100%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      padding: 14px 28px;
+      background: rgba(13, 26, 46, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(212, 201, 160, 0.12);
+    }
+
+    .nav-logo {
+      height: 48px;
+      width: auto;
+      display: block;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(74, 158, 221, 0.08) 0%, transparent 70%);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--navy));
+      pointer-events: none;
+    }
+
+    /* floating animation */
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-14px); }
+    }
+
+    @keyframes glow-pulse {
+      0%, 100% { filter: drop-shadow(0 0 24px rgba(74, 158, 221, 0.5)); }
+      50% { filter: drop-shadow(0 0 48px rgba(74, 158, 221, 0.9)); }
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .hero-logo {
+      width: min(480px, 88vw);
+      animation: float 4s ease-in-out infinite, glow-pulse 4s ease-in-out infinite;
+      margin-bottom: 36px;
+    }
+
+    .coming-soon-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, rgba(245, 200, 66, 0.15), rgba(245, 200, 66, 0.05));
+      border: 1.5px solid var(--gold);
+      border-radius: 50px;
+      padding: 10px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 40px;
+      box-shadow: 0 0 24px rgba(245, 200, 66, 0.2), inset 0 0 24px rgba(245, 200, 66, 0.04);
+    }
+
+    .coming-soon-badge .apple-icon {
+      font-size: 18px;
+    }
+
+    .hero-description {
+      max-width: 620px;
+      font-size: 18px;
+      line-height: 1.75;
+      color: rgba(237, 229, 200, 0.85);
+      margin-bottom: 52px;
+    }
+
+    /* ── SCROLL HINT ── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      color: rgba(212, 201, 160, 0.4);
+      font-size: 12px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); opacity: 0.4; }
+      50% { transform: translateY(6px); opacity: 1; }
+    }
+
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid rgba(212, 201, 160, 0.4);
+      border-bottom: 2px solid rgba(212, 201, 160, 0.4);
+      transform: rotate(45deg);
+      animation: bounce 1.8s ease-in-out infinite;
+    }
+
+    /* ── OBSTACLES ── */
+    .obstacles {
+      position: relative;
+      z-index: 1;
+      padding: 80px 24px;
+      background: linear-gradient(to bottom, var(--navy), var(--navy-mid));
+    }
+
+    .obstacles-inner {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blue-glow);
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 800;
+      color: var(--cream-light);
+      margin-bottom: 56px;
+      line-height: 1.2;
+    }
+
+    .obstacles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+
+    .obstacle-card {
+      background: rgba(30, 51, 87, 0.4);
+      border: 1px solid rgba(212, 201, 160, 0.1);
+      border-radius: 16px;
+      padding: 32px 20px;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .obstacle-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(212, 201, 160, 0.25);
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+    }
+
+    .obstacle-emoji {
+      font-size: 44px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .obstacle-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .obstacle-card p {
+      font-size: 14px;
+      color: rgba(237, 229, 200, 0.6);
+      line-height: 1.6;
+    }
+
+    /* ── STORY ── */
+    .story {
+      position: relative;
+      z-index: 1;
+      padding: 80px 24px;
+      background: linear-gradient(to bottom, var(--navy-mid), var(--navy));
+      text-align: center;
+    }
+
+    .story-inner {
+      max-width: 680px;
+      margin: 0 auto;
+    }
+
+    .story-quote {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-style: italic;
+      line-height: 1.85;
+      color: rgba(237, 229, 200, 0.75);
+      padding: 36px 40px;
+      border-left: 3px solid var(--blue-glow);
+      background: rgba(74, 158, 221, 0.05);
+      border-radius: 0 12px 12px 0;
+      text-align: left;
+      margin-top: 32px;
+    }
+
+    /* ── IMPOSSIBLE MODE ── */
+    .impossible {
+      position: relative;
+      z-index: 1;
+      padding: 72px 24px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .impossible::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(224, 48, 48, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .impossible-inner {
+      position: relative;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .impossible-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: #fff;
+      background: linear-gradient(135deg, var(--lava), var(--fire));
+      padding: 6px 16px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(224, 48, 48, 0.5);
+    }
+
+    .impossible h2 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff9966, #ff4444, #ff9966);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: shimmer 3s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    .impossible p {
+      font-size: 18px;
+      color: rgba(237, 229, 200, 0.7);
+      line-height: 1.7;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: rgba(0, 0, 0, 0.4);
+      border-top: 1px solid rgba(212, 201, 160, 0.08);
+      padding: 40px 24px;
+      text-align: center;
+    }
+
+    .footer-inner {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 32px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      color: rgba(212, 201, 160, 0.55);
+      text-decoration: none;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--cream);
+    }
+
+    .footer-copy {
+      font-size: 13px;
+      color: rgba(212, 201, 160, 0.3);
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .hero-description { font-size: 16px; }
+      .story-quote { padding: 24px 20px; font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <img src="wmg-logo.png" alt="Water Mill Games" class="nav-logo" />
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <img src="drop-word-logo.png" alt="Drop Word" class="hero-logo" />
+
+    <div class="coming-soon-badge">
+      <span class="apple-icon">🍎</span>
+      Coming Soon to the App Store!
+    </div>
+
+    <p class="hero-description">
+      Solve the words, save the Princess. Help Prince Voweliant reach his one true love as he races against time to descramble a series of challenging words. Help him escape lava, snakes, a kraken, and more! And be careful, because Impossible Mode is exactly that.
+    </p>
+
+    <div class="scroll-hint">
+      <span>Discover</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- OBSTACLES -->
+  <section class="obstacles">
+    <div class="obstacles-inner">
+      <div class="section-eyebrow">What awaits you</div>
+      <h2 class="section-title">Perils & Challenges</h2>
+      <div class="obstacles-grid">
+        <div class="obstacle-card">
+          <span class="obstacle-emoji">🌋</span>
+          <h3>Lava</h3>
+          <p>The ground is crumbling beneath you. Think fast — every wrong letter costs precious seconds.</p>
+        </div>
+        <div class="obstacle-card">
+          <span class="obstacle-emoji">🐍</span>
+          <h3>Snakes</h3>
+          <p>Coiled and waiting. Unscramble the word before they strike.</p>
+        </div>
+        <div class="obstacle-card">
+          <span class="obstacle-emoji">🦑</span>
+          <h3>The Kraken</h3>
+          <p>From the deep it rises. Only the right word will send it back down.</p>
+        </div>
+        <div class="obstacle-card">
+          <span class="obstacle-emoji">👑</span>
+          <h3>The Princess</h3>
+          <p>She awaits at the end of every challenge. Don't keep her waiting too long.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STORY -->
+  <section class="story">
+    <div class="story-inner">
+      <div class="section-eyebrow">The Quest</div>
+      <h2 class="section-title">A Prince. A Princess. One Scrambled Alphabet.</h2>
+      <blockquote class="story-quote">
+        "Solve the words, save the Princess. Help Prince Voweliant reach his one true love as he races against time to descramble a series of challenging words. Help him escape lava, snakes, a kraken, and more! And be careful, because Impossible Mode is exactly that."
+      </blockquote>
+    </div>
+  </section>
+
+  <!-- IMPOSSIBLE MODE -->
+  <section class="impossible">
+    <div class="impossible-inner">
+      <div class="impossible-label">⚠ Warning</div>
+      <h2>Impossible Mode</h2>
+      <p>You've been warned. Impossible Mode is exactly that — a gauntlet designed for only the most fearless of word solvers. Do you dare?</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <nav class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="mailto:watermillgamesusa@gmail.com">Contact</a>
+      </nav>
+      <p class="footer-copy">&copy; 2026 Water Mill Games LLC. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
