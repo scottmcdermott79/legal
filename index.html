@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Water Mill Games – Word Drop</title>
+  <title>Water Mill Games – Drop Word</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -67,7 +67,7 @@
     }
 
     .nav-logo {
-      height: 48px;
+      height: 192px;
       width: auto;
       display: block;
     }
@@ -251,6 +251,132 @@
       line-height: 1.6;
     }
 
+    /* ── SCREENSHOTS ── */
+    .screenshots {
+      position: relative;
+      z-index: 1;
+      padding: 90px 24px;
+      background: linear-gradient(to bottom, var(--navy-mid), var(--navy));
+      overflow: hidden;
+    }
+
+    .screenshots::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(74, 158, 221, 0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .screenshots-inner {
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .screenshots-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px 48px;
+      align-items: start;
+    }
+
+    /* Left column sits a bit lower, right column higher — staggered feel */
+    .screenshots-grid .phone-wrap:nth-child(1),
+    .screenshots-grid .phone-wrap:nth-child(3) {
+      margin-top: 0;
+    }
+    .screenshots-grid .phone-wrap:nth-child(2),
+    .screenshots-grid .phone-wrap:nth-child(4) {
+      margin-top: 40px;
+    }
+
+    .phone-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .phone-frame {
+      position: relative;
+      border-radius: 36px;
+      padding: 10px;
+      background: linear-gradient(145deg, #2a3a5c, #111a2e);
+      box-shadow:
+        0 0 0 1.5px rgba(255,255,255,0.06),
+        0 24px 60px rgba(0,0,0,0.6),
+        inset 0 0 0 1px rgba(255,255,255,0.04);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+    }
+
+    /* alternating tilts */
+    .phone-wrap:nth-child(1) .phone-frame { transform: rotate(-2.5deg); }
+    .phone-wrap:nth-child(2) .phone-frame { transform: rotate(2deg); }
+    .phone-wrap:nth-child(3) .phone-frame { transform: rotate(1.5deg); }
+    .phone-wrap:nth-child(4) .phone-frame { transform: rotate(-2deg); }
+
+    .phone-wrap:hover .phone-frame {
+      transform: rotate(0deg) scale(1.03) !important;
+    }
+
+    /* per-card glow colors */
+    .phone-wrap:nth-child(1):hover .phone-frame {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(74,158,221,0.25);
+    }
+    .phone-wrap:nth-child(2):hover .phone-frame {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(255,107,53,0.3);
+    }
+    .phone-wrap:nth-child(3):hover .phone-frame {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(180,100,220,0.25);
+    }
+    .phone-wrap:nth-child(4):hover .phone-frame {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(74,158,221,0.25);
+    }
+
+    /* notch */
+    .phone-frame::before {
+      content: '';
+      position: absolute;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 72px;
+      height: 10px;
+      background: #0d1a2e;
+      border-radius: 8px;
+      z-index: 10;
+    }
+
+    .phone-frame img {
+      display: block;
+      width: 100%;
+      border-radius: 28px;
+      max-width: 240px;
+    }
+
+    .phone-caption {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(212, 201, 160, 0.45);
+      text-align: center;
+    }
+
+    @media (max-width: 600px) {
+      .screenshots-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 20px 16px;
+      }
+      .phone-frame img { max-width: 100%; }
+      .phone-wrap:nth-child(2),
+      .phone-wrap:nth-child(4) { margin-top: 24px; }
+    }
+
     /* ── STORY ── */
     .story {
       position: relative;
@@ -389,7 +515,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <img src="word-drop-logo.jpg" alt="Word Drop" class="hero-logo" />
+    <img src="word-drop-logo.jpg" alt="Drop Word" class="hero-logo" />
 
     <div class="coming-soon-badge">
       <span class="apple-icon">🍎</span>
@@ -432,6 +558,45 @@
           <h3>The Princess</h3>
           <p>She awaits at the end of every challenge. Don't keep her waiting too long.</p>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="screenshots">
+    <div class="screenshots-inner">
+      <div class="section-eyebrow" style="text-align:center; margin-bottom:14px;">See it in action</div>
+      <h2 class="section-title" style="text-align:center; margin-bottom:52px;">Screenshots</h2>
+      <div class="screenshots-grid">
+
+        <div class="phone-wrap">
+          <div class="phone-frame">
+            <img src="screenshot-menu.jpg" alt="Drop Word main menu" />
+          </div>
+          <span class="phone-caption">Main Menu</span>
+        </div>
+
+        <div class="phone-wrap">
+          <div class="phone-frame">
+            <img src="screenshot-lava.jpg" alt="Lava level gameplay" />
+          </div>
+          <span class="phone-caption">Lava Level</span>
+        </div>
+
+        <div class="phone-wrap">
+          <div class="phone-frame">
+            <img src="screenshot-ghosts.jpg" alt="Impossible mode gameplay" />
+          </div>
+          <span class="phone-caption">Impossible Mode</span>
+        </div>
+
+        <div class="phone-wrap">
+          <div class="phone-frame">
+            <img src="screenshot-howtoplay.jpg" alt="How to Play screen" />
+          </div>
+          <span class="phone-caption">How to Play</span>
+        </div>
+
       </div>
     </div>
   </section>
