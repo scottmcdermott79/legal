@@ -61,16 +61,33 @@
       z-index: 200;
       display: flex;
       align-items: center;
+      gap: 14px;
       padding: 10px 28px;
       background: rgba(13, 26, 46, 0.95);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(212, 201, 160, 0.12);
     }
 
+    .nav-logo-wrap {
+      height: 57px;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-start;
+    }
+
     .nav-logo {
-      height: 44px;
+      height: 74px;
       width: auto;
       display: block;
+    }
+
+    .nav-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--cream);
+      white-space: nowrap;
     }
 
     /* ── TABS ── */
@@ -791,7 +808,10 @@
 
   <!-- NAV -->
   <nav>
-    <img src="wmg-logo-300x300.jpg" alt="Water Mill Games" class="nav-logo" />
+    <div class="nav-logo-wrap">
+      <img src="wmg-logo-300x300.jpg" alt="Water Mill Games logo" class="nav-logo" />
+    </div>
+    <span class="nav-title">Water Mill Games</span>
   </nav>
 
   <!-- TABS -->
