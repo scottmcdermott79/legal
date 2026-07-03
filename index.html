@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Water Mill Games</title>
+  <link rel="icon" type="image/svg+xml" href="favicon-a.svg"/>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,6 +30,7 @@
       color: var(--cream-light);
       min-height: 100vh;
       overflow-x: hidden;
+      padding-top: 133px;
     }
 
     body::before {
@@ -56,8 +58,10 @@
 
     /* ── NAV ── */
     nav {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 200;
       display: flex;
       align-items: center;
@@ -92,8 +96,10 @@
 
     /* ── TABS ── */
     .game-tabs {
-      position: sticky;
-      top: 64px;
+      position: fixed;
+      top: 77px;
+      left: 0;
+      right: 0;
       z-index: 150;
       background: rgba(13, 26, 46, 0.97);
       backdrop-filter: blur(12px);

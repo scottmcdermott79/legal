@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Circular background -->
+  <circle cx="32" cy="32" r="32" fill="#14243d"/>
+  <!-- Water -->
+  <path d="M2 46 Q16 41 32 46 Q48 51 62 46 L62 62 L2 62 Z" fill="#2a6ba8" opacity="0.8"/>
+  <!-- 6-spoke wheel, warmer wood tone -->
+  <circle cx="32" cy="28" r="21" fill="none" stroke="#c8a96e" stroke-width="3.5"/>
+  <g stroke="#c8a96e" stroke-width="2.2" stroke-linecap="round">
+    <line x1="32" y1="28" x2="32" y2="8"/>
+    <line x1="32" y1="28" x2="32" y2="48"/>
+    <line x1="32" y1="28" x2="14.8" y2="38"/>
+    <line x1="32" y1="28" x2="49.2" y2="18"/>
+    <line x1="32" y1="28" x2="14.8" y2="18"/>
+    <line x1="32" y1="28" x2="49.2" y2="38"/>
+  </g>
+  <!-- Paddles (blue water scoops) -->
+  <rect x="29" y="4" width="6" height="6" rx="1.5" fill="#4a9edd"/>
+  <rect x="29" y="47" width="6" height="6" rx="1.5" fill="#4a9edd"/>
+  <rect x="10.5" y="34.5" width="6" height="6" rx="1.5" fill="#4a9edd" transform="rotate(-60 13.5 37.5)"/>
+  <rect x="47.5" y="14.5" width="6" height="6" rx="1.5" fill="#4a9edd" transform="rotate(-60 50.5 17.5)"/>
+  <rect x="10.5" y="14.5" width="6" height="6" rx="1.5" fill="#4a9edd" transform="rotate(60 13.5 17.5)"/>
+  <rect x="47.5" y="34.5" width="6" height="6" rx="1.5" fill="#4a9edd" transform="rotate(60 50.5 37.5)"/>
+  <!-- Hub -->
+  <circle cx="32" cy="28" r="5" fill="#14243d" stroke="#c8a96e" stroke-width="2.5"/>
+  <circle cx="32" cy="28" r="2" fill="#c8a96e"/>
+</svg>
