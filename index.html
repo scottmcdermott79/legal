@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Water Mill Games – Drop Word</title>
+  <title>Water Mill Games</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -13,10 +13,12 @@
       --navy-light: #1e3357;
       --cream: #d4c9a0;
       --cream-light: #ede5c8;
-      --blue-glow: #4a9edd;
-      --gold: #f5c842;
-      --fire: #ff6b35;
-      --lava: #e03030;
+      --wd-blue: #4a9edd;
+      --wd-gold: #f5c842;
+      --wd-fire: #ff6b35;
+      --wd-lava: #e03030;
+      --wb-green: #4caf7d;
+      --wb-teal: #2da5a5;
     }
 
     html { scroll-behavior: smooth; }
@@ -29,7 +31,6 @@
       overflow-x: hidden;
     }
 
-    /* ── STARS BACKGROUND ── */
     body::before {
       content: '';
       position: fixed;
@@ -57,101 +58,202 @@
     nav {
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
-      padding: 14px 28px;
-      background: rgba(13, 26, 46, 0.92);
+      padding: 10px 28px;
+      background: rgba(13, 26, 46, 0.95);
       backdrop-filter: blur(10px);
       border-bottom: 1px solid rgba(212, 201, 160, 0.12);
     }
 
     .nav-logo {
-      height: 192px;
+      height: 44px;
       width: auto;
       display: block;
+    }
+
+    /* ── TABS ── */
+    .game-tabs {
+      position: sticky;
+      top: 64px;
+      z-index: 150;
+      background: rgba(13, 26, 46, 0.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(212, 201, 160, 0.1);
+      display: flex;
+      justify-content: center;
+      padding: 0 16px;
+    }
+
+    .tab-btn {
+      position: relative;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 16px 28px;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: rgba(212, 201, 160, 0.45);
+      transition: color 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .tab-btn::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 16px;
+      right: 16px;
+      height: 2px;
+      border-radius: 2px 2px 0 0;
+      transform: scaleX(0);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+      opacity: 0;
+    }
+
+    .tab-btn[data-tab="word-drop"]::after    { background: var(--wd-blue); }
+    .tab-btn[data-tab="word-bridge"]::after  { background: var(--wb-green); }
+    .tab-btn[data-tab="coming-soon"]::after  { background: var(--wd-gold); }
+
+    .tab-btn[data-tab="word-drop"].active    { color: var(--wd-blue); }
+    .tab-btn[data-tab="word-bridge"].active  { color: var(--wb-green); }
+    .tab-btn[data-tab="coming-soon"].active  { color: var(--wd-gold); }
+
+    .tab-btn.active::after { transform: scaleX(1); opacity: 1; }
+    .tab-btn:hover:not(.active) { color: rgba(212, 201, 160, 0.75); }
+
+    /* ── PANELS ── */
+    .tab-panel { display: none; animation: fadeUp 0.3s ease; }
+    .tab-panel.active { display: block; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
     /* ── HERO ── */
     .hero {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
+      min-height: 90vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      padding: 80px 24px 60px;
-      background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(74, 158, 221, 0.08) 0%, transparent 70%);
+      padding: 80px 24px 80px;
     }
+
+    .hero-wd { background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(74,158,221,0.08) 0%, transparent 70%); }
+    .hero-wb { background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(76,175,125,0.08) 0%, transparent 70%); }
 
     .hero::after {
       content: '';
       position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 120px;
+      bottom: 0; left: 0; right: 0;
+      height: 100px;
       background: linear-gradient(to bottom, transparent, var(--navy));
       pointer-events: none;
     }
 
-    /* floating animation */
     @keyframes float {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-14px); }
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-14px); }
     }
-
-    @keyframes glow-pulse {
-      0%, 100% { filter: drop-shadow(0 0 24px rgba(74, 158, 221, 0.5)); }
-      50% { filter: drop-shadow(0 0 48px rgba(74, 158, 221, 0.9)); }
+    @keyframes glow-blue {
+      0%, 100% { filter: drop-shadow(0 0 24px rgba(74,158,221,0.5)); }
+      50%       { filter: drop-shadow(0 0 52px rgba(74,158,221,0.95)); }
     }
-
+    @keyframes glow-green {
+      0%, 100% { filter: drop-shadow(0 0 24px rgba(76,175,125,0.5)); }
+      50%       { filter: drop-shadow(0 0 52px rgba(76,175,125,0.95)); }
+    }
     @keyframes shimmer {
-      0% { background-position: -200% center; }
-      100% { background-position: 200% center; }
+      0%   { background-position: -200% center; }
+      100% { background-position:  200% center; }
     }
 
-    .hero-logo {
-      width: min(480px, 88vw);
-      animation: float 4s ease-in-out infinite, glow-pulse 4s ease-in-out infinite;
-      margin-bottom: 36px;
+    .hero-logo-wd {
+      width: min(420px, 80vw);
+      animation: float 4s ease-in-out infinite, glow-blue 4s ease-in-out infinite;
+      margin-bottom: 32px;
     }
 
-    .coming-soon-badge {
+    .hero-logo-wb {
+      width: min(300px, 70vw);
+      border-radius: 28px;
+      animation: float 4s ease-in-out infinite, glow-green 4s ease-in-out infinite;
+      margin-bottom: 32px;
+    }
+
+    .app-badge {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: linear-gradient(135deg, rgba(245, 200, 66, 0.15), rgba(245, 200, 66, 0.05));
-      border: 1.5px solid var(--gold);
+      background: linear-gradient(135deg, rgba(245,200,66,0.15), rgba(245,200,66,0.05));
+      border: 1.5px solid var(--wd-gold);
       border-radius: 50px;
       padding: 10px 24px;
       font-size: 15px;
       font-weight: 600;
       letter-spacing: 0.06em;
-      color: var(--gold);
+      color: var(--wd-gold);
       text-transform: uppercase;
-      margin-bottom: 40px;
-      box-shadow: 0 0 24px rgba(245, 200, 66, 0.2), inset 0 0 24px rgba(245, 200, 66, 0.04);
+      margin-bottom: 24px;
+      box-shadow: 0 0 24px rgba(245,200,66,0.2), inset 0 0 24px rgba(245,200,66,0.04);
     }
 
-    .coming-soon-badge .apple-icon {
-      font-size: 18px;
+    /* QR block — hidden on mobile */
+    .qr-block {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: rgba(30, 51, 87, 0.55);
+      border: 1px solid rgba(212, 201, 160, 0.15);
+      border-radius: 16px;
+      padding: 14px 20px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
     }
+
+    .qr-block img {
+      width: 76px;
+      height: 76px;
+      border-radius: 8px;
+      background: white;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .qr-text strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--cream);
+      margin-bottom: 3px;
+    }
+
+    .qr-text span {
+      font-size: 12px;
+      color: rgba(212, 201, 160, 0.5);
+      letter-spacing: 0.04em;
+    }
+
+    @media (max-width: 768px) { .qr-block { display: none; } }
 
     .hero-description {
-      max-width: 620px;
+      max-width: 580px;
       font-size: 18px;
-      line-height: 1.75;
+      line-height: 1.8;
       color: rgba(237, 229, 200, 0.85);
-      margin-bottom: 52px;
     }
 
-    /* ── SCROLL HINT ── */
     .scroll-hint {
       position: absolute;
-      bottom: 36px;
+      bottom: 32px;
       left: 50%;
       transform: translateX(-50%);
       z-index: 2;
@@ -159,35 +261,35 @@
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      color: rgba(212, 201, 160, 0.4);
-      font-size: 12px;
-      letter-spacing: 0.1em;
+      color: rgba(212, 201, 160, 0.35);
+      font-size: 11px;
+      letter-spacing: 0.12em;
       text-transform: uppercase;
     }
 
     @keyframes bounce {
-      0%, 100% { transform: translateY(0); opacity: 0.4; }
-      50% { transform: translateY(6px); opacity: 1; }
+      0%, 100% { transform: translateY(0) rotate(45deg);   opacity: 0.35; }
+      50%       { transform: translateY(6px) rotate(45deg); opacity: 1; }
     }
 
     .scroll-arrow {
-      width: 20px;
-      height: 20px;
-      border-right: 2px solid rgba(212, 201, 160, 0.4);
-      border-bottom: 2px solid rgba(212, 201, 160, 0.4);
-      transform: rotate(45deg);
+      width: 18px;
+      height: 18px;
+      border-right: 2px solid rgba(212, 201, 160, 0.35);
+      border-bottom: 2px solid rgba(212, 201, 160, 0.35);
       animation: bounce 1.8s ease-in-out infinite;
     }
 
-    /* ── OBSTACLES ── */
-    .obstacles {
+    /* ── FEATURE CARDS ── */
+    .features-section {
       position: relative;
       z-index: 1;
       padding: 80px 24px;
-      background: linear-gradient(to bottom, var(--navy), var(--navy-mid));
     }
+    .features-wd { background: linear-gradient(to bottom, var(--navy), var(--navy-mid)); }
+    .features-wb { background: linear-gradient(to bottom, var(--navy), var(--navy-mid)); }
 
-    .obstacles-inner {
+    .features-inner {
       max-width: 900px;
       margin: 0 auto;
       text-align: center;
@@ -198,25 +300,27 @@
       font-weight: 700;
       letter-spacing: 0.2em;
       text-transform: uppercase;
-      color: var(--blue-glow);
       margin-bottom: 14px;
     }
+    .eyebrow-blue  { color: var(--wd-blue); }
+    .eyebrow-green { color: var(--wb-green); }
+    .eyebrow-gold  { color: var(--wd-gold); }
 
     .section-title {
-      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
       font-weight: 800;
       color: var(--cream-light);
-      margin-bottom: 56px;
+      margin-bottom: 52px;
       line-height: 1.2;
     }
 
-    .obstacles-grid {
+    .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
       gap: 24px;
     }
 
-    .obstacle-card {
+    .feature-card {
       background: rgba(30, 51, 87, 0.4);
       border: 1px solid rgba(212, 201, 160, 0.1);
       border-radius: 16px;
@@ -224,19 +328,15 @@
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
     }
 
-    .obstacle-card:hover {
+    .feature-card:hover {
       transform: translateY(-6px);
       border-color: rgba(212, 201, 160, 0.25);
-      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.3);
     }
 
-    .obstacle-emoji {
-      font-size: 44px;
-      margin-bottom: 16px;
-      display: block;
-    }
+    .feature-emoji { font-size: 44px; margin-bottom: 16px; display: block; }
 
-    .obstacle-card h3 {
+    .feature-card h3 {
       font-size: 1rem;
       font-weight: 700;
       color: var(--cream);
@@ -245,106 +345,97 @@
       letter-spacing: 0.06em;
     }
 
-    .obstacle-card p {
+    .feature-card p {
       font-size: 14px;
       color: rgba(237, 229, 200, 0.6);
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
-    /* ── SCREENSHOTS ── */
+    /* ── CAROUSEL ── */
     .screenshots {
       position: relative;
       z-index: 1;
-      padding: 90px 24px;
-      background: linear-gradient(to bottom, var(--navy-mid), var(--navy));
+      padding: 80px 0 96px;
       overflow: hidden;
     }
 
-    .screenshots::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 700px;
-      height: 700px;
-      background: radial-gradient(circle, rgba(74, 158, 221, 0.07) 0%, transparent 70%);
-      pointer-events: none;
+    .screenshots-wd { background: linear-gradient(to bottom, var(--navy-mid), var(--navy)); }
+    .screenshots-wb { background: linear-gradient(to bottom, var(--navy-mid), var(--navy)); }
+
+    .screenshots-header {
+      text-align: center;
+      padding: 0 24px;
+      margin-bottom: 44px;
     }
 
-    .screenshots-inner {
-      max-width: 960px;
+    .carousel-outer {
+      position: relative;
+      max-width: 1100px;
       margin: 0 auto;
+      padding: 0 56px;
     }
 
-    .screenshots-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px 48px;
-      align-items: start;
+    @media (max-width: 560px) {
+      .carousel-outer { padding: 0 12px; }
     }
 
-    /* Left column sits a bit lower, right column higher — staggered feel */
-    .screenshots-grid .phone-wrap:nth-child(1),
-    .screenshots-grid .phone-wrap:nth-child(3) {
-      margin-top: 0;
+    .carousel-track-wrapper { overflow: hidden; }
+
+    .carousel-track {
+      display: flex;
+      gap: 24px;
+      transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      will-change: transform;
     }
-    .screenshots-grid .phone-wrap:nth-child(2),
-    .screenshots-grid .phone-wrap:nth-child(4) {
-      margin-top: 40px;
+
+    .carousel-slide {
+      flex: 0 0 calc(25% - 18px);
+      min-width: 160px;
     }
+
+    @media (max-width: 900px) { .carousel-slide { flex: 0 0 calc(50% - 12px); } }
+    @media (max-width: 560px) { .carousel-slide { flex: 0 0 calc(85% - 12px); } }
 
     .phone-wrap {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      cursor: pointer;
     }
 
     .phone-frame {
       position: relative;
       border-radius: 36px;
       padding: 10px;
+      width: 100%;
       background: linear-gradient(145deg, #2a3a5c, #111a2e);
       box-shadow:
         0 0 0 1.5px rgba(255,255,255,0.06),
         0 24px 60px rgba(0,0,0,0.6),
         inset 0 0 0 1px rgba(255,255,255,0.04);
-      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
-
-    /* alternating tilts */
-    .phone-wrap:nth-child(1) .phone-frame { transform: rotate(-2.5deg); }
-    .phone-wrap:nth-child(2) .phone-frame { transform: rotate(2deg); }
-    .phone-wrap:nth-child(3) .phone-frame { transform: rotate(1.5deg); }
-    .phone-wrap:nth-child(4) .phone-frame { transform: rotate(-2deg); }
 
     .phone-wrap:hover .phone-frame {
-      transform: rotate(0deg) scale(1.03) !important;
+      transform: scale(1.04);
     }
 
-    /* per-card glow colors */
-    .phone-wrap:nth-child(1):hover .phone-frame {
-      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(74,158,221,0.25);
+    .tab-panel[data-panel="word-drop"]   .phone-wrap:hover .phone-frame {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 28px 64px rgba(0,0,0,0.5), 0 0 40px rgba(74,158,221,0.3);
     }
-    .phone-wrap:nth-child(2):hover .phone-frame {
-      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(255,107,53,0.3);
-    }
-    .phone-wrap:nth-child(3):hover .phone-frame {
-      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(180,100,220,0.25);
-    }
-    .phone-wrap:nth-child(4):hover .phone-frame {
-      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 32px 70px rgba(0,0,0,0.5), 0 0 40px rgba(74,158,221,0.25);
+    .tab-panel[data-panel="word-bridge"] .phone-wrap:hover .phone-frame {
+      box-shadow: 0 0 0 1.5px rgba(255,255,255,0.08), 0 28px 64px rgba(0,0,0,0.5), 0 0 40px rgba(76,175,125,0.3);
     }
 
-    /* notch */
+    /* Dynamic Island / notch */
     .phone-frame::before {
       content: '';
       position: absolute;
       top: 14px;
       left: 50%;
       transform: translateX(-50%);
-      width: 72px;
+      width: 68px;
       height: 10px;
       background: #0d1a2e;
       border-radius: 8px;
@@ -355,27 +446,125 @@
       display: block;
       width: 100%;
       border-radius: 28px;
-      max-width: 240px;
+      pointer-events: none;
+      user-select: none;
     }
 
     .phone-caption {
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.09em;
       text-transform: uppercase;
-      color: rgba(212, 201, 160, 0.45);
+      color: rgba(212, 201, 160, 0.4);
       text-align: center;
     }
 
-    @media (max-width: 600px) {
-      .screenshots-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 20px 16px;
-      }
-      .phone-frame img { max-width: 100%; }
-      .phone-wrap:nth-child(2),
-      .phone-wrap:nth-child(4) { margin-top: 24px; }
+    /* Carousel arrows */
+    .carousel-btn {
+      position: absolute;
+      top: 40%;
+      transform: translateY(-50%);
+      z-index: 10;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(212, 201, 160, 0.2);
+      background: rgba(13, 26, 46, 0.9);
+      color: var(--cream);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
+      line-height: 1;
     }
+
+    .carousel-btn:hover:not(:disabled) {
+      background: rgba(30, 51, 87, 0.95);
+      border-color: rgba(212, 201, 160, 0.45);
+    }
+
+    .carousel-btn:disabled { opacity: 0.2; cursor: default; }
+    .carousel-btn-prev { left: 4px; }
+    .carousel-btn-next { right: 4px; }
+
+    /* Dots */
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 36px;
+    }
+
+    .carousel-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(212, 201, 160, 0.2);
+      border: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      padding: 0;
+    }
+
+    .carousel-dot.active {
+      background: var(--cream);
+      width: 24px;
+      border-radius: 4px;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(0, 0, 0, 0.93);
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .lightbox.open {
+      display: flex;
+      animation: fadeUp 0.2s ease;
+    }
+
+    .lightbox-inner {
+      position: relative;
+      max-height: 90vh;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .lightbox-inner img {
+      width: 100%;
+      border-radius: 32px;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: -14px;
+      right: -14px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.15);
+      border: 1.5px solid rgba(255,255,255,0.25);
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s ease;
+      line-height: 1;
+    }
+
+    .lightbox-close:hover { background: rgba(255,255,255,0.28); }
 
     /* ── STORY ── */
     .story {
@@ -392,23 +581,31 @@
     }
 
     .story-quote {
-      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
       font-style: italic;
-      line-height: 1.85;
+      line-height: 1.9;
       color: rgba(237, 229, 200, 0.75);
-      padding: 36px 40px;
-      border-left: 3px solid var(--blue-glow);
-      background: rgba(74, 158, 221, 0.05);
+      padding: 32px 36px;
       border-radius: 0 12px 12px 0;
       text-align: left;
-      margin-top: 32px;
+      margin-top: 28px;
+    }
+
+    .story-quote-wd {
+      border-left: 3px solid var(--wd-blue);
+      background: rgba(74, 158, 221, 0.06);
+    }
+
+    .story-quote-wb {
+      border-left: 3px solid var(--wb-green);
+      background: rgba(76, 175, 125, 0.06);
     }
 
     /* ── IMPOSSIBLE MODE ── */
     .impossible {
       position: relative;
       z-index: 1;
-      padding: 72px 24px;
+      padding: 72px 24px 88px;
       text-align: center;
       overflow: hidden;
     }
@@ -417,15 +614,11 @@
       content: '';
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(224, 48, 48, 0.1) 0%, transparent 70%);
+      background: radial-gradient(ellipse 70% 80% at 50% 50%, rgba(224,48,48,0.1) 0%, transparent 70%);
       pointer-events: none;
     }
 
-    .impossible-inner {
-      position: relative;
-      max-width: 640px;
-      margin: 0 auto;
-    }
+    .impossible-inner { position: relative; max-width: 640px; margin: 0 auto; }
 
     .impossible-label {
       display: inline-block;
@@ -434,11 +627,11 @@
       letter-spacing: 0.25em;
       text-transform: uppercase;
       color: #fff;
-      background: linear-gradient(135deg, var(--lava), var(--fire));
+      background: linear-gradient(135deg, var(--wd-lava), var(--wd-fire));
       padding: 6px 16px;
       border-radius: 4px;
       margin-bottom: 20px;
-      box-shadow: 0 4px 20px rgba(224, 48, 48, 0.5);
+      box-shadow: 0 4px 20px rgba(224,48,48,0.5);
     }
 
     .impossible h2 {
@@ -456,23 +649,65 @@
     .impossible p {
       font-size: 18px;
       color: rgba(237, 229, 200, 0.7);
-      line-height: 1.7;
+      line-height: 1.75;
+    }
+
+    /* ── COMING SOON PANEL ── */
+    .coming-soon-panel {
+      position: relative;
+      z-index: 1;
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(245,200,66,0.06) 0%, transparent 70%);
+    }
+
+    @keyframes float-q {
+      0%, 100% { transform: translateY(0) rotate(-4deg); }
+      50%       { transform: translateY(-18px) rotate(4deg); }
+    }
+    @keyframes glow-gold {
+      0%, 100% { filter: drop-shadow(0 0 24px rgba(245,200,66,0.4)) drop-shadow(0 0 2px rgba(245,200,66,0.6)); }
+      50%       { filter: drop-shadow(0 0 56px rgba(245,200,66,0.8)) drop-shadow(0 0 8px rgba(245,200,66,0.9)); }
+    }
+
+    .mystery-emoji {
+      font-size: clamp(96px, 18vw, 148px);
+      line-height: 1;
+      margin-bottom: 40px;
+      display: inline-block;
+      animation: float-q 4s ease-in-out infinite, glow-gold 4s ease-in-out infinite;
+    }
+
+    .coming-soon-panel h2 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 900;
+      color: var(--cream-light);
+      margin-bottom: 18px;
+    }
+
+    .coming-soon-panel p {
+      font-size: 18px;
+      color: rgba(237, 229, 200, 0.6);
+      max-width: 460px;
+      line-height: 1.8;
     }
 
     /* ── FOOTER ── */
     footer {
       position: relative;
       z-index: 1;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0,0,0,0.4);
       border-top: 1px solid rgba(212, 201, 160, 0.08);
       padding: 40px 24px;
       text-align: center;
     }
 
-    .footer-inner {
-      max-width: 760px;
-      margin: 0 auto;
-    }
+    .footer-inner { max-width: 760px; margin: 0 auto; }
 
     .footer-links {
       display: flex;
@@ -483,24 +718,23 @@
     }
 
     .footer-links a {
-      color: rgba(212, 201, 160, 0.55);
+      color: rgba(212, 201, 160, 0.5);
       text-decoration: none;
       font-size: 14px;
       letter-spacing: 0.04em;
       transition: color 0.2s;
     }
 
-    .footer-links a:hover {
-      color: var(--cream);
-    }
+    .footer-links a:hover { color: var(--cream); }
 
     .footer-copy {
       font-size: 13px;
-      color: rgba(212, 201, 160, 0.3);
+      color: rgba(212, 201, 160, 0.28);
     }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 540px) {
+      .tab-btn { padding: 14px 12px; font-size: 12px; }
       .hero-description { font-size: 16px; }
       .story-quote { padding: 24px 20px; font-size: 1rem; }
     }
@@ -510,116 +744,261 @@
 
   <!-- NAV -->
   <nav>
-    <img src="wmg-logo.jpg" alt="Water Mill Games" class="nav-logo" />
+    <img src="wmg-logo-300x300.jpg" alt="Water Mill Games" class="nav-logo" />
   </nav>
 
-  <!-- HERO -->
-  <section class="hero">
-    <img src="word-drop-logo.jpg" alt="Drop Word" class="hero-logo" />
+  <!-- TABS -->
+  <div class="game-tabs" role="tablist">
+    <button class="tab-btn active" data-tab="word-drop"    role="tab" aria-selected="true">⚔️ Word Drop</button>
+    <button class="tab-btn"        data-tab="word-bridge"  role="tab" aria-selected="false">🌉 Word Bridge</button>
+    <button class="tab-btn"        data-tab="coming-soon"  role="tab" aria-selected="false">✨ Coming Soon</button>
+  </div>
 
-    <div class="coming-soon-badge">
-      <span class="apple-icon">🍎</span>
-      Coming Soon to the App Store!
-    </div>
 
-    <p class="hero-description">
-      Solve the words, save the Princess. Help Prince Voweliant reach his one true love as he races against time to descramble a series of challenging words. Help him escape lava, snakes, a kraken, and more! And be careful, because Impossible Mode is exactly that.
-    </p>
+  <!-- ═══════════ WORD DROP ═══════════ -->
+  <div class="tab-panel active" id="panel-word-drop" data-panel="word-drop" role="tabpanel">
 
-    <div class="scroll-hint">
-      <span>Discover</span>
-      <div class="scroll-arrow"></div>
-    </div>
-  </section>
+    <section class="hero hero-wd">
+      <img src="word-drop-logo.png" alt="Word Drop" class="hero-logo-wd" />
 
-  <!-- OBSTACLES -->
-  <section class="obstacles">
-    <div class="obstacles-inner">
-      <div class="section-eyebrow">What awaits you</div>
-      <h2 class="section-title">Perils & Challenges</h2>
-      <div class="obstacles-grid">
-        <div class="obstacle-card">
-          <span class="obstacle-emoji">🌋</span>
-          <h3>Lava</h3>
-          <p>The ground is crumbling beneath you. Think fast — every wrong letter costs precious seconds.</p>
-        </div>
-        <div class="obstacle-card">
-          <span class="obstacle-emoji">🐍</span>
-          <h3>Snakes</h3>
-          <p>Coiled and waiting. Unscramble the word before they strike.</p>
-        </div>
-        <div class="obstacle-card">
-          <span class="obstacle-emoji">🦑</span>
-          <h3>The Kraken</h3>
-          <p>From the deep it rises. Only the right word will send it back down.</p>
-        </div>
-        <div class="obstacle-card">
-          <span class="obstacle-emoji">👑</span>
-          <h3>The Princess</h3>
-          <p>She awaits at the end of every challenge. Don't keep her waiting too long.</p>
+      <div class="app-badge">
+        <span>🍎</span> Available on the App Store
+      </div>
+
+      <div class="qr-block">
+        <img src="qr-code-worddrop.png" alt="Scan to download Word Drop" />
+        <div class="qr-text">
+          <strong>Download Word Drop</strong>
+          <span>Scan with your iPhone camera</span>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- SCREENSHOTS -->
-  <section class="screenshots">
-    <div class="screenshots-inner">
-      <div class="section-eyebrow" style="text-align:center; margin-bottom:14px;">See it in action</div>
-      <h2 class="section-title" style="text-align:center; margin-bottom:52px;">Screenshots</h2>
-      <div class="screenshots-grid">
+      <p class="hero-description">
+        Solve the words, save the Princess. Help Prince Voweliant race against time to descramble a series of challenging words. Escape lava, snakes, a kraken, and more — then dare to face Impossible Mode.
+      </p>
 
-        <div class="phone-wrap">
-          <div class="phone-frame">
-            <img src="screenshot-menu.jpg" alt="Drop Word main menu" />
-          </div>
-          <span class="phone-caption">Main Menu</span>
-        </div>
-
-        <div class="phone-wrap">
-          <div class="phone-frame">
-            <img src="screenshot-lava.jpg" alt="Lava level gameplay" />
-          </div>
-          <span class="phone-caption">Lava Level</span>
-        </div>
-
-        <div class="phone-wrap">
-          <div class="phone-frame">
-            <img src="screenshot-ghosts.jpg" alt="Impossible mode gameplay" />
-          </div>
-          <span class="phone-caption">Impossible Mode</span>
-        </div>
-
-        <div class="phone-wrap">
-          <div class="phone-frame">
-            <img src="screenshot-howtoplay.jpg" alt="How to Play screen" />
-          </div>
-          <span class="phone-caption">How to Play</span>
-        </div>
-
+      <div class="scroll-hint">
+        <span>Discover</span>
+        <div class="scroll-arrow"></div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- STORY -->
-  <section class="story">
-    <div class="story-inner">
-      <div class="section-eyebrow">The Quest</div>
-      <h2 class="section-title">A Prince. A Princess. One Scrambled Alphabet.</h2>
-      <blockquote class="story-quote">
-        "Solve the words, save the Princess. Help Prince Voweliant reach his one true love as he races against time to descramble a series of challenging words. Help him escape lava, snakes, a kraken, and more! And be careful, because Impossible Mode is exactly that."
-      </blockquote>
-    </div>
-  </section>
+    <section class="features-section features-wd">
+      <div class="features-inner">
+        <div class="section-eyebrow eyebrow-blue">What awaits you</div>
+        <h2 class="section-title">Perils &amp; Challenges</h2>
+        <div class="cards-grid">
+          <div class="feature-card">
+            <span class="feature-emoji">🌋</span>
+            <h3>Lava</h3>
+            <p>The ground is crumbling beneath you. Think fast — every wrong letter costs precious seconds.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-emoji">🐍</span>
+            <h3>Snakes</h3>
+            <p>Coiled and waiting. Unscramble the word before they strike.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-emoji">🦑</span>
+            <h3>The Kraken</h3>
+            <p>From the deep it rises. Only the right word will send it back down.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-emoji">👑</span>
+            <h3>The Princess</h3>
+            <p>She awaits at the end of every challenge. Don't keep her waiting too long.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <!-- IMPOSSIBLE MODE -->
-  <section class="impossible">
-    <div class="impossible-inner">
-      <div class="impossible-label">⚠ Warning</div>
-      <h2>Impossible Mode</h2>
-      <p>You've been warned. Impossible Mode is exactly that — a gauntlet designed for only the most fearless of word solvers. Do you dare?</p>
+    <section class="screenshots screenshots-wd">
+      <div class="screenshots-header">
+        <div class="section-eyebrow eyebrow-blue">See it in action</div>
+        <h2 class="section-title">Screenshots</h2>
+      </div>
+      <div class="carousel-outer" id="wd-carousel">
+        <button class="carousel-btn carousel-btn-prev" aria-label="Previous">&#8592;</button>
+        <div class="carousel-track-wrapper">
+          <div class="carousel-track" id="wd-track">
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="screenshot-menu.jpg" data-caption="Main Menu">
+                <div class="phone-frame"><img src="screenshot-menu.jpg" alt="Main menu" /></div>
+                <span class="phone-caption">Main Menu</span>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="screenshot-lava.jpg" data-caption="Lava Level">
+                <div class="phone-frame"><img src="screenshot-lava.jpg" alt="Lava level" /></div>
+                <span class="phone-caption">Lava Level</span>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="screenshot-ghosts.jpg" data-caption="Impossible Mode">
+                <div class="phone-frame"><img src="screenshot-ghosts.jpg" alt="Impossible mode" /></div>
+                <span class="phone-caption">Impossible Mode</span>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="screenshot-howtoplay.jpg" data-caption="How to Play">
+                <div class="phone-frame"><img src="screenshot-howtoplay.jpg" alt="How to Play" /></div>
+                <span class="phone-caption">How to Play</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-btn-next" aria-label="Next">&#8594;</button>
+        <div class="carousel-dots" id="wd-dots"></div>
+      </div>
+    </section>
+
+    <section class="story">
+      <div class="story-inner">
+        <div class="section-eyebrow eyebrow-blue">The Quest</div>
+        <h2 class="section-title">A Prince. A Princess. One Scrambled Alphabet.</h2>
+        <blockquote class="story-quote story-quote-wd">
+          "Help Prince Voweliant reach his one true love as he races against time to descramble a series of challenging words. Escape lava, snakes, a kraken, and more — and be careful, because Impossible Mode is exactly that."
+        </blockquote>
+      </div>
+    </section>
+
+    <section class="impossible">
+      <div class="impossible-inner">
+        <div class="impossible-label">⚠ Warning</div>
+        <h2>Impossible Mode</h2>
+        <p>You've been warned. Impossible Mode is exactly that — a gauntlet designed for only the most fearless of word solvers. Do you dare?</p>
+      </div>
+    </section>
+
+  </div><!-- /word-drop -->
+
+
+  <!-- ═══════════ WORD BRIDGE ═══════════ -->
+  <div class="tab-panel" id="panel-word-bridge" data-panel="word-bridge" role="tabpanel">
+
+    <section class="hero hero-wb">
+      <img src="word-bridge-logo.png" alt="Word Bridge" class="hero-logo-wb" />
+
+      <div class="app-badge" style="border-color:var(--wb-green); color:var(--wb-green); background:linear-gradient(135deg,rgba(76,175,125,0.15),rgba(76,175,125,0.05)); box-shadow:0 0 24px rgba(76,175,125,0.2);">
+        <span>🍎</span> Coming Soon to the App Store
+      </div>
+
+      <p class="hero-description">
+        Help Bridget the engineer build bridges across the river by finding hidden words in the letter grid. Trace a path from one bank to the other — the faster you solve, the higher you climb on the leaderboard.
+      </p>
+
+      <div class="scroll-hint">
+        <span>Explore</span>
+        <div class="scroll-arrow"></div>
+      </div>
+    </section>
+
+    <section class="features-section features-wb">
+      <div class="features-inner">
+        <div class="section-eyebrow eyebrow-green">How it works</div>
+        <h2 class="section-title">Build Your Bridge, Word by Word</h2>
+        <div class="cards-grid">
+          <div class="feature-card">
+            <span class="feature-emoji">🔡</span>
+            <h3>Find the Words</h3>
+            <p>Hidden words are scattered across the letter grid. Trace them to help Bridget cross the river.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-emoji">🌉</span>
+            <h3>Build the Bridge</h3>
+            <p>Each word you find lays another plank across the river. Connect one bank to the other to win.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-emoji">⏱️</span>
+            <h3>Race the Clock</h3>
+            <p>Your solve time determines your leaderboard rank. Speed and accuracy both matter.</p>
+          </div>
+          <div class="feature-card">
+            <span class="feature-emoji">🏆</span>
+            <h3>Leaderboards</h3>
+            <p>Compete against players worldwide. Can you claim the top spot and become the master bridge builder?</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screenshots screenshots-wb">
+      <div class="screenshots-header">
+        <div class="section-eyebrow eyebrow-green">See it in action</div>
+        <h2 class="section-title">Screenshots</h2>
+      </div>
+      <div class="carousel-outer" id="wb-carousel">
+        <button class="carousel-btn carousel-btn-prev" aria-label="Previous">&#8592;</button>
+        <div class="carousel-track-wrapper">
+          <div class="carousel-track" id="wb-track">
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="wb-screenshot-menu.jpg" data-caption="Main Menu">
+                <div class="phone-frame"><img src="wb-screenshot-menu.jpg" alt="Word Bridge main menu" /></div>
+                <span class="phone-caption">Main Menu</span>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="wb-screenshot-howtoplay.jpg" data-caption="Meet Bridget">
+                <div class="phone-frame"><img src="wb-screenshot-howtoplay.jpg" alt="How to Play" /></div>
+                <span class="phone-caption">Meet Bridget</span>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="wb-screenshot-gameplay-green.jpg" data-caption="Gameplay">
+                <div class="phone-frame"><img src="wb-screenshot-gameplay-green.jpg" alt="Gameplay" /></div>
+                <span class="phone-caption">Gameplay</span>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="wb-screenshot-gameplay-sand.jpg" data-caption="Larger Grid">
+                <div class="phone-frame"><img src="wb-screenshot-gameplay-sand.jpg" alt="Larger grid" /></div>
+                <span class="phone-caption">Larger Grid</span>
+              </div>
+            </div>
+            <div class="carousel-slide">
+              <div class="phone-wrap" data-img="wb-screenshot-gameplay-purple.jpg" data-caption="Expert Mode">
+                <div class="phone-frame"><img src="wb-screenshot-gameplay-purple.jpg" alt="Expert mode" /></div>
+                <span class="phone-caption">Expert Mode</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="carousel-btn carousel-btn-next" aria-label="Next">&#8594;</button>
+        <div class="carousel-dots" id="wb-dots"></div>
+      </div>
+    </section>
+
+    <section class="story">
+      <div class="story-inner">
+        <div class="section-eyebrow eyebrow-green">Meet Bridget</div>
+        <h2 class="section-title">An Engineer on a Mission</h2>
+        <blockquote class="story-quote story-quote-wb">
+          "Bridget is a dedicated engineer who wants to build bridges. To help her, you'll need to find the hidden words and give her a path from one side of the river to the other. The faster you find the words, the faster she builds — and the higher you climb on the leaderboard."
+        </blockquote>
+      </div>
+    </section>
+
+  </div><!-- /word-bridge -->
+
+
+  <!-- ═══════════ COMING SOON ═══════════ -->
+  <div class="tab-panel" id="panel-coming-soon" data-panel="coming-soon" role="tabpanel">
+    <section class="coming-soon-panel">
+      <span class="mystery-emoji">🎮</span>
+      <h2>Something's Coming...</h2>
+      <p>Water Mill Games is hard at work on the next adventure. Stay tuned — it's going to be a good one.</p>
+    </section>
+  </div>
+
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Screenshot viewer">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" id="lightbox-close" aria-label="Close">&#215;</button>
+      <img id="lightbox-img" src="" alt="" />
     </div>
-  </section>
+  </div>
+
 
   <!-- FOOTER -->
   <footer>
@@ -633,5 +1012,110 @@
     </div>
   </footer>
 
+
+  <script>
+    // ── TABS ──────────────────────────────────────────────────────────────
+    const tabs   = document.querySelectorAll('.tab-btn');
+    const panels = document.querySelectorAll('.tab-panel');
+
+    function activateTab(name) {
+      tabs.forEach(t => {
+        const on = t.dataset.tab === name;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', on);
+      });
+      panels.forEach(p => p.classList.toggle('active', p.id === `panel-${name}`));
+      history.replaceState(null, '', `#${name}`);
+    }
+
+    tabs.forEach(t => t.addEventListener('click', () => activateTab(t.dataset.tab)));
+
+    const initHash = location.hash.replace('#', '');
+    if (['word-drop','word-bridge','coming-soon'].includes(initHash)) activateTab(initHash);
+
+
+    // ── CAROUSEL ──────────────────────────────────────────────────────────
+    function makeCarousel(trackId, dotsId, outerEl) {
+      const track   = document.getElementById(trackId);
+      const dotsEl  = document.getElementById(dotsId);
+      const slides  = Array.from(track.querySelectorAll('.carousel-slide'));
+      const prevBtn = outerEl.querySelector('.carousel-btn-prev');
+      const nextBtn = outerEl.querySelector('.carousel-btn-next');
+      let idx = 0;
+
+      function cols() {
+        const w = outerEl.offsetWidth;
+        if (w < 560) return 1;
+        if (w < 900) return 2;
+        return 4;
+      }
+
+      function maxIdx() { return Math.max(0, slides.length - cols()); }
+
+      function slideW() {
+        if (!slides[0]) return 0;
+        const gap = parseInt(getComputedStyle(track).gap) || 24;
+        return slides[0].offsetWidth + gap;
+      }
+
+      function buildDots() {
+        dotsEl.innerHTML = '';
+        for (let i = 0; i <= maxIdx(); i++) {
+          const d = document.createElement('button');
+          d.className = 'carousel-dot' + (i === idx ? ' active' : '');
+          d.setAttribute('aria-label', `Go to slide ${i + 1}`);
+          d.addEventListener('click', () => goTo(i));
+          dotsEl.appendChild(d);
+        }
+      }
+
+      function goTo(i) {
+        idx = Math.max(0, Math.min(i, maxIdx()));
+        track.style.transform = `translateX(-${idx * slideW()}px)`;
+        prevBtn.disabled = idx === 0;
+        nextBtn.disabled = idx >= maxIdx();
+        dotsEl.querySelectorAll('.carousel-dot').forEach((d, j) => d.classList.toggle('active', j === idx));
+      }
+
+      prevBtn.addEventListener('click', () => goTo(idx - 1));
+      nextBtn.addEventListener('click', () => goTo(idx + 1));
+
+      buildDots();
+      goTo(0);
+
+      let rTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(rTimer);
+        rTimer = setTimeout(() => { buildDots(); goTo(Math.min(idx, maxIdx())); }, 120);
+      });
+    }
+
+    makeCarousel('wd-track', 'wd-dots', document.getElementById('wd-carousel'));
+    makeCarousel('wb-track', 'wb-dots', document.getElementById('wb-carousel'));
+
+
+    // ── LIGHTBOX ──────────────────────────────────────────────────────────
+    const lightbox      = document.getElementById('lightbox');
+    const lightboxImg   = document.getElementById('lightbox-img');
+    const lightboxClose = document.getElementById('lightbox-close');
+
+    document.querySelectorAll('.phone-wrap').forEach(wrap => {
+      wrap.addEventListener('click', () => {
+        lightboxImg.src = wrap.dataset.img || '';
+        lightboxImg.alt = wrap.dataset.caption || '';
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLb() {
+      lightbox.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    lightboxClose.addEventListener('click', closeLb);
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLb(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+  </script>
 </body>
 </html>
