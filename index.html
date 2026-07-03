@@ -380,7 +380,12 @@
       .carousel-outer { padding: 0 12px; }
     }
 
-    .carousel-track-wrapper { overflow: hidden; }
+    .carousel-track-wrapper {
+      overflow-x: hidden;
+      overflow-y: visible;
+      padding: 16px 8px;
+      margin: -16px -8px;
+    }
 
     .carousel-track {
       display: flex;
@@ -446,6 +451,8 @@
     .phone-frame img {
       display: block;
       width: 100%;
+      aspect-ratio: 9 / 19.5;
+      object-fit: cover;
       border-radius: 28px;
       pointer-events: none;
       user-select: none;
