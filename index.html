@@ -178,13 +178,14 @@
 
     .hero-logo-wd {
       width: min(420px, 80vw);
+      border-radius: 20px;
       animation: float 4s ease-in-out infinite, glow-blue 4s ease-in-out infinite;
       margin-bottom: 32px;
     }
 
     .hero-logo-wb {
       width: min(300px, 70vw);
-      border-radius: 28px;
+      border-radius: 20px;
       animation: float 4s ease-in-out infinite, glow-green 4s ease-in-out infinite;
       margin-bottom: 32px;
     }
@@ -675,12 +676,51 @@
       50%       { filter: drop-shadow(0 0 56px rgba(245,200,66,0.8)) drop-shadow(0 0 8px rgba(245,200,66,0.9)); }
     }
 
-    .mystery-emoji {
-      font-size: clamp(96px, 18vw, 148px);
-      line-height: 1;
+    .mystery-phone {
+      position: relative;
+      width: clamp(90px, 16vw, 130px);
+      height: clamp(160px, 28vw, 230px);
+      background: linear-gradient(160deg, #1e3357, #0d1a2e);
+      border: 3px solid rgba(245, 200, 66, 0.5);
+      border-radius: 22px;
       margin-bottom: 40px;
-      display: inline-block;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       animation: float-q 4s ease-in-out infinite, glow-gold 4s ease-in-out infinite;
+      box-shadow: 0 0 0 1px rgba(245,200,66,0.15), inset 0 0 24px rgba(245,200,66,0.05);
+    }
+
+    .mystery-phone::before {
+      content: '';
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 38%;
+      height: 6px;
+      background: rgba(245, 200, 66, 0.3);
+      border-radius: 4px;
+    }
+
+    .mystery-phone::after {
+      content: '';
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 28%;
+      height: 4px;
+      background: rgba(245, 200, 66, 0.2);
+      border-radius: 3px;
+    }
+
+    .mystery-phone-q {
+      font-size: clamp(52px, 9vw, 80px);
+      font-weight: 900;
+      color: var(--wd-gold);
+      line-height: 1;
+      text-shadow: 0 0 24px rgba(245,200,66,0.7);
     }
 
     .coming-soon-panel h2 {
@@ -984,7 +1024,7 @@
   <!-- ═══════════ COMING SOON ═══════════ -->
   <div class="tab-panel" id="panel-coming-soon" data-panel="coming-soon" role="tabpanel">
     <section class="coming-soon-panel">
-      <span class="mystery-emoji">🎮</span>
+      <div class="mystery-phone"><span class="mystery-phone-q">?</span></div>
       <h2>Something's Coming...</h2>
       <p>Water Mill Games is hard at work on the next adventure. Stay tuned — it's going to be a good one.</p>
     </section>
