@@ -205,6 +205,23 @@
       background: #000;
     }
 
+    .media-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px 0 24px;
+    }
+
+    .media-row .thumb-card {
+      max-width: 260px;
+      margin-bottom: 0;
+    }
+
+    .media-row .thumb-card video {
+      max-width: none;
+      margin: 0 0 10px;
+    }
+
     .quote-placeholder {
       background: #f3f3f3;
       border-left: 4px solid #999;
@@ -263,36 +280,48 @@
       <p>When you're stuck, four helpers keep the momentum going — Synonyms, Extra Time, New Word, and Reveal Letter — so a tough word never ends the run. Four difficulty levels, from Easy all the way to Impossible, keep it approachable for newcomers and punishing for word-game veterans. Every level has its own original music, and players can unlock badges and share their achievements with friends.</p>
 
       <h3>Easy mode</h3>
-      <video controls preload="metadata">
-        <source src="worddrop-gameplay-easy.mp4" type="video/mp4" />
-        Your browser does not support embedded video. <a href="worddrop-gameplay-easy.mp4" download>Download the gameplay clip</a>.
-      </video>
-
-      <div class="thumb-card" style="max-width: 260px; margin-bottom: 24px;">
-        <img src="word-drop-gameplay.gif" alt="Word Drop gameplay animation, easy mode" style="aspect-ratio: auto;" />
-        <a class="dl-link" href="word-drop-gameplay.gif" download>Download GIF</a>
+      <div class="media-row">
+        <div class="thumb-card">
+          <video controls preload="metadata">
+            <source src="worddrop-gameplay-easy.mp4" type="video/mp4" />
+            Your browser does not support embedded video.
+          </video>
+          <a class="dl-link" href="worddrop-gameplay-easy.mp4" download>Download Video</a>
+        </div>
+        <div class="thumb-card">
+          <img src="word-drop-gameplay.gif" alt="Word Drop gameplay animation, easy mode" style="aspect-ratio: auto;" />
+          <a class="dl-link" href="word-drop-gameplay.gif" download>Download GIF</a>
+        </div>
       </div>
 
       <h3>Medium mode</h3>
-      <video controls preload="metadata">
-        <source src="word-drop-gameplay-medium.mp4" type="video/mp4" />
-        Your browser does not support embedded video. <a href="word-drop-gameplay-medium.mp4" download>Download the gameplay clip</a>.
-      </video>
-
-      <div class="thumb-card" style="max-width: 260px; margin-bottom: 24px;">
-        <img src="word-drop-gameplay-medium.gif" alt="Word Drop gameplay animation, medium mode" style="aspect-ratio: auto;" />
-        <a class="dl-link" href="word-drop-gameplay-medium.gif" download>Download GIF</a>
+      <div class="media-row">
+        <div class="thumb-card">
+          <video controls preload="metadata">
+            <source src="word-drop-gameplay-medium.mp4" type="video/mp4" />
+            Your browser does not support embedded video.
+          </video>
+          <a class="dl-link" href="word-drop-gameplay-medium.mp4" download>Download Video</a>
+        </div>
+        <div class="thumb-card">
+          <img src="word-drop-gameplay-medium.gif" alt="Word Drop gameplay animation, medium mode" style="aspect-ratio: auto;" />
+          <a class="dl-link" href="word-drop-gameplay-medium.gif" download>Download GIF</a>
+        </div>
       </div>
 
       <h3>Impossible mode</h3>
-      <video controls preload="metadata">
-        <source src="word-drop-gameplay-impossible.mp4" type="video/mp4" />
-        Your browser does not support embedded video. <a href="word-drop-gameplay-impossible.mp4" download>Download the gameplay clip</a>.
-      </video>
-
-      <div class="thumb-card" style="max-width: 260px; margin-bottom: 24px;">
-        <img src="word-drop-gameplay-impossible.gif" alt="Word Drop gameplay animation, impossible mode" style="aspect-ratio: auto;" />
-        <a class="dl-link" href="word-drop-gameplay-impossible.gif" download>Download GIF</a>
+      <div class="media-row">
+        <div class="thumb-card">
+          <video controls preload="metadata">
+            <source src="word-drop-gameplay-impossible.mp4" type="video/mp4" />
+            Your browser does not support embedded video.
+          </video>
+          <a class="dl-link" href="word-drop-gameplay-impossible.mp4" download>Download Video</a>
+        </div>
+        <div class="thumb-card">
+          <img src="word-drop-gameplay-impossible.gif" alt="Word Drop gameplay animation, impossible mode" style="aspect-ratio: auto;" />
+          <a class="dl-link" href="word-drop-gameplay-impossible.gif" download>Download GIF</a>
+        </div>
       </div>
 
       <div class="fact-sheet">
